@@ -1,9 +1,6 @@
 package ru.protopopova.model;
 
 import org.hibernate.annotations.BatchSize;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.validator.constraints.SafeHtml;
 import org.springframework.util.CollectionUtils;
 
 import javax.persistence.*;
@@ -18,7 +15,7 @@ import java.util.Set;
 @Entity
 @Table(name = "users", uniqueConstraints = {@UniqueConstraint(columnNames = "email", name = "users_unique_email_idx")})
 public class User {
-    public static final int START_SEQ = 100000;
+    private static final int START_SEQ = 100000;
     @Id
     @SequenceGenerator(name = "global_seq", sequenceName = "global_seq", allocationSize = 1, initialValue = START_SEQ)
     //    @Column(name = "id", unique = true, nullable = false, columnDefinition = "integer default nextval('global_seq')")
@@ -28,7 +25,7 @@ public class User {
     @NotBlank
     @Size(min = 2, max = 100)
     @Column(name = "name", nullable = false)
-    protected String name;
+    private String name;
 
     @Column(name = "email", nullable = false, unique = true)
     @Email
@@ -121,5 +118,18 @@ public class User {
 
     public void setRoles(Set<Role> roles) {
         this.roles = CollectionUtils.isEmpty(roles) ? EnumSet.noneOf(Role.class) : EnumSet.copyOf(roles);
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", enabled=" + enabled +
+                ", registered=" + registered +
+                ", roles=" + roles +
+                '}';
     }
 }

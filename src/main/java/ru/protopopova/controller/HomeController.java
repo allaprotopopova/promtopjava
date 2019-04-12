@@ -1,17 +1,15 @@
 package ru.protopopova.controller;
 
-import java.io.IOException;
-import java.util.List;
-
-import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import ru.protopopova.model.User;
 import ru.protopopova.repository.UserRepository;
+
+import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 @Controller
 public class HomeController {
@@ -23,12 +21,13 @@ public class HomeController {
         this.userRepository = userRepository;
     }
 
-    @RequestMapping(value="/")
-	public ModelAndView test(HttpServletResponse response) throws IOException{
-		return new ModelAndView("home");
+    @GetMapping(value="/")
+	public String test(HttpServletResponse response) {
+		return "home";
 	}
-	@RequestMapping(value="/users", produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<User> getUsers(HttpServletResponse response) throws IOException{
+	@GetMapping(value="/users", produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public List<User> getUsers() {
 		return userRepository.findAll();
 	}
 }
