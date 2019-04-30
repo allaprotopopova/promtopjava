@@ -1,15 +1,15 @@
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
-import ru.protopopova.config.ApplicationConfig;
-import ru.protopopova.repository.UserRepository;
+import ru.protopopova.ApplicationConfig;
+import ru.protopopova.repository.CrudUserRepository;
 
 
 @SpringJUnitConfig(ApplicationConfig.class)
-class UserRepositoryTest {
+class CrudUserRepositoryTest {
 
     @Autowired
-    UserRepository repository;
+    CrudUserRepository repository;
 
     @Test
     void findAll() {

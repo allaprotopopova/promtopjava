@@ -1,7 +1,12 @@
 DELETE
 FROM user_roles;
+DELETE from votes;
+DELETE  from menu;
+delete from dishes;
+delete from restaurants;
 DELETE
 FROM users;
+
 ALTER SEQUENCE global_seq
   RESTART WITH 100000;
 

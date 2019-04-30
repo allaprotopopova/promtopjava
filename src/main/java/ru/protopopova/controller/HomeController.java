@@ -6,7 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import ru.protopopova.model.User;
-import ru.protopopova.repository.UserRepository;
+import ru.protopopova.repository.CrudUserRepository;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
@@ -14,10 +14,10 @@ import java.util.List;
 @Controller
 public class HomeController {
 
-    private final UserRepository userRepository;
+    private final CrudUserRepository userRepository;
 
     @Autowired
-    public HomeController(UserRepository userRepository) {
+    public HomeController(CrudUserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
