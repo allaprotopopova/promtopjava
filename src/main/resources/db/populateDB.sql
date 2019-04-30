@@ -1,12 +1,82 @@
-DELETE FROM user_roles;
-DELETE FROM users;
-ALTER SEQUENCE global_seq RESTART WITH 100000;
+DELETE
+FROM user_roles;
+DELETE
+FROM users;
+ALTER SEQUENCE global_seq
+  RESTART WITH 100000;
 
-INSERT INTO users (name, email, password) VALUES
-  ('User', 'user@yandex.ru', '{noop}password'),
-  ('Admin', 'admin@gmail.com', '{noop}admin');
+INSERT INTO users (name, email, password)
+VALUES ('Alla', 'alla@yandex.ru', '{noop}password'),
+       ('Artemis', 'artemis@yandex.ru', '{noop}password'),
+       ('Ksandr', 'ksandr@yandex.ru', '{noop}password'),
+       ('Admin', 'admin@gmail.com', '{noop}admin');
 
-INSERT INTO user_roles (role, user_id) VALUES
-  ('ROLE_USER', 100000),
-  ('ROLE_ADMIN', 100001),
-  ('ROLE_USER', 100001);
+INSERT INTO user_roles (role, user_id)
+VALUES ('ROLE_USER', 100000),
+       ('ROLE_USER', 100001),
+       ('ROLE_USER', 100002),
+       ('ROLE_ADMIN', 100003),
+       ('ROLE_USER', 100003);
+
+INSERT INTO restaurants (id, name, adress)
+VALUES (1, 'Прага', 'улица Арбат'),
+       (2, 'Корчма', 'Рязанский проспект'),
+       (3, 'Пушкин', 'Пушкинская площадь');
+
+
+INSERT INTO dishes (id, name)
+values (6, 'Гренки'),
+       (7, 'Суп-лапша куриный'),
+       (8, 'Котлеты по-Киевски'),
+       (9, 'Рогалик'),
+       (10, 'Морс 1 л'),
+       (11, 'Рис'),
+       (12, 'Картофельное пюре'),
+       (13, 'Треска в кляре'),
+       (14, 'Бульон с яйцом'),
+       (15, 'Шашлык'),
+       (16, 'Пахлава'),
+       (17, 'Биточки куриные'),
+       (18, 'Салат Цезарь'),
+       (19, 'Чай'),
+       (20, 'Салат Витаминный');
+
+INSERT INTO menu (created, restaurant_id, dish_id, price)
+values ('2019-04-30', 1, 7, 65.00),
+       ('2019-04-30', 1, 8, 135.00),
+       ('2019-04-30', 1, 12, 50.00),
+       ('2019-04-30', 1, 10, 120.00),
+       ('2019-04-30', 1, 18, 70.00),
+       ('2019-04-30', 2, 14, 65.00),
+       ('2019-04-30', 2, 15, 240.00),
+       ('2019-04-30', 2, 18, 85.00),
+       ('2019-04-30', 2, 16, 100.00),
+       ('2019-04-30', 2, 19, 30.00),
+       ('2019-04-30', 3, 13, 275.00),
+       ('2019-04-30', 3, 12, 40.00),
+       ('2019-04-30', 3, 10, 120.00),
+       ('2019-04-30', 3, 17, 150.00),
+       ('2019-05-01', 3, 7, 65.00),
+       ('2019-05-01', 3, 8, 135.00),
+       ('2019-05-01', 3, 12, 50.00),
+       ('2019-05-01', 3, 10, 120.00),
+       ('2019-05-01', 3, 18, 70.00),
+       ('2019-05-01', 1, 14, 65.00),
+       ('2019-05-01', 1, 15, 240.00),
+       ('2019-05-01', 1, 18, 85.00),
+       ('2019-05-01', 1, 16, 100.00),
+       ('2019-05-01', 1, 19, 30.00),
+       ('2019-05-01', 2, 13, 275.00),
+       ('2019-05-01', 2, 12, 40.00),
+       ('2019-05-01', 2, 10, 120.00),
+       ('2019-05-01', 2, 17, 150.00);
+
+INSERT INTO votes (registered, user_id, restaurant_id)
+values ('2019-04-30', 100000, 1),
+       ('2019-04-30', 100001, 1),
+       ('2019-04-30', 100002, 2),
+       ('2019-05-01', 100000, 3),
+       ('2019-05-01', 100001, 2),
+       ('2019-05-01', 100002, 1);
+
+
