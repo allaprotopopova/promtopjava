@@ -1,5 +1,6 @@
 package ru.protopopova.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
@@ -7,17 +8,22 @@ import javax.persistence.UniqueConstraint;
 @Entity
 @Table(name="dishes", uniqueConstraints = {@UniqueConstraint(columnNames = "name", name = "dishes_unique_name_idx")})
 public class Dish extends AbstractNamedEntity {
+
+    @Column(name = "price")
+    double price;
     public Dish() {
     }
 
-    public Dish(Integer id, String name) {
+    public Dish(Integer id, String name, double price) {
         super(id, name);
+        this.price=price;
     }
 
     @Override
     public String toString() {
         return "Dish{" +
-                "name='" + name + '\'' +
+                "price=" + price +
+                ", name='" + name + '\'' +
                 ", id=" + id +
                 '}';
     }

@@ -18,9 +18,8 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static ru.protopopova.DishesData.*;
 
-@SpringJUnitConfig(ApplicationConfig.class)
-@Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
-public class DishServiceTest {
+
+public class DishServiceTest extends AbstractServiceTest {
 
     @Autowired
     DishService service;

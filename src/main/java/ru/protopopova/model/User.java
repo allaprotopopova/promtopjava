@@ -8,9 +8,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.Date;
-import java.util.EnumSet;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "users", uniqueConstraints = {@UniqueConstraint(columnNames = "email", name = "users_unique_email_idx")})
@@ -42,15 +40,29 @@ public class User extends AbstractNamedEntity {
     @BatchSize(size = 200)
     private Set<Role> roles;
 
+
     public User() {
     }
 
-    public User(@Email @NotBlank @Size(max = 100) String email, @NotBlank @Size(min = 5, max = 100) String password, boolean enabled, @NotNull Date registered, Set<Role> roles) {
+    public User(String name, @Email @NotBlank @Size(max = 100) String email, @NotBlank @Size(min = 5, max = 100) String password, boolean enabled, Set<Role> roles) {
+        super(null, name);
         this.email = email;
         this.password = password;
         this.enabled = enabled;
         this.registered = registered;
         this.roles = roles;
+    }
+
+    public User(int userId, String name, String email, String password, boolean enabled, Set<Role> rolesUser) {
+        super(userId, name);
+        this.email = email;
+        this.enabled = enabled;
+        this.password = password;
+        setRoles(rolesUser);
+    }
+
+    public User(User user) {
+        this(user.getId(), user.getName(), user.getEmail(), user.getPassword(), user.isEnabled(), user.getRoles());
     }
 
     public String getEmail() {
