@@ -2,9 +2,11 @@ package ru.protopopova.service;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.Assert;
 import ru.protopopova.model.Restaurant;
 import ru.protopopova.model.Vote;
 import ru.protopopova.util.IllegalVoteChangingException;
+import ru.protopopova.util.NotFoundException;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -61,8 +63,7 @@ class VoteServiceImplTest extends AbstractServiceTest {
     }
     @Test
     void getByUserAndDateNotExist() {
-        Vote vote = service.getByUserAndDate(USER_1.getId(), LocalDate.of(2019, 03,30));
-        assertNull(vote);
+        assertThrows(NotFoundException.class, ()->service.getByUserAndDate(USER_1.getId(), LocalDate.of(2019, 03,30)));
     }
 
     @Test
@@ -81,5 +82,10 @@ class VoteServiceImplTest extends AbstractServiceTest {
         } else {
             assertMatch(service.save(VOTE_7), VOTE_7);
         }
+    }
+
+    @Test
+    void delete() {
+        assertThrows(IllegalVoteChangingException.class, ()->service.delete(1));
     }
 }
