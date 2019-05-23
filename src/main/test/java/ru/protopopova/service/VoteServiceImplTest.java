@@ -7,6 +7,7 @@ import ru.protopopova.model.Vote;
 import ru.protopopova.util.IllegalVoteChangingException;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -75,6 +76,10 @@ class VoteServiceImplTest extends AbstractServiceTest {
     }
     @Test()
     void saveDouble() {
-        assertThrows(IllegalVoteChangingException.class, ()-> service.save(VOTE_7));
+        if(LocalTime.now().isAfter(LocalTime.of(11,00))) {
+            assertThrows(IllegalVoteChangingException.class, ()-> service.save(VOTE_7));
+        } else {
+            assertMatch(service.save(VOTE_7), VOTE_7);
+        }
     }
 }
