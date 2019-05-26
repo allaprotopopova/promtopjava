@@ -27,6 +27,13 @@ public class Menu extends AbstractEntity {
     public Menu() {
     }
 
+    public Menu(Integer id, Restaurant restaurant, LocalDate created, List<Dish> dishes) {
+        super(id);
+        this.restaurant = restaurant;
+        this.created = created;
+        this.dishes = dishes;
+    }
+
     public Restaurant getRestaurant() {
         return restaurant;
     }
@@ -49,5 +56,13 @@ public class Menu extends AbstractEntity {
 
     public void setDishes(List<Dish> dishes) {
         this.dishes = dishes;
+    }
+
+    @Override
+    public String toString() {
+        return "Menu{ created=" + created +
+                ", dishes=" + dishes +
+                "restId="+restaurant.getId()+
+                '}';
     }
 }

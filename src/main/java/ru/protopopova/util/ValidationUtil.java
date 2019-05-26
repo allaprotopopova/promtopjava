@@ -28,6 +28,11 @@ public class ValidationUtil {
             throw new NotFoundException(arg);
         }
     }
+    public static void checkNew(HasId bean) {
+        if (!bean.isNew()) {
+            throw new IllegalRequestDataException(bean + " must be new (id=null)");
+        }
+    }
 
 
 

@@ -11,11 +11,13 @@ import org.springframework.util.Assert;
 import ru.protopopova.ApplicationConfig;
 import ru.protopopova.DishesData;
 import ru.protopopova.model.Dish;
+import ru.protopopova.util.NotFoundException;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static ru.protopopova.DishesData.*;
 
 
@@ -35,8 +37,7 @@ public class DishServiceTest extends AbstractServiceTest {
     }
     @Test
     public void getByIdNotExist() {
-        Assert.isNull(service.getById(99), "Exception when getByIdNotExist");
-    }
+        assertThrows(NotFoundException.class, ()->service.getById(99));}
 
     @Test
     public void delete() {
@@ -48,10 +49,8 @@ public class DishServiceTest extends AbstractServiceTest {
 
     @Test
     public void deleteNotExist() {
-        service.delete(99);
-        List<Dish> copyList = new ArrayList<>(DISHES);
-        assertMatch(service.get(), copyList);
-    }
+       assertThrows(NotFoundException.class, ()-> service.delete(99));
+       }
 
     @Test
     public void save() {

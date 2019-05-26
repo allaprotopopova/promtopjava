@@ -2,10 +2,14 @@ package ru.protopopova.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 import ru.protopopova.model.Restaurant;
 import ru.protopopova.repository.CrudRestaurantRepository;
+import ru.protopopova.util.NotFoundException;
 
 import java.util.List;
+
+import static ru.protopopova.util.ValidationUtil.checkNotFoundWithId;
 
 @Service
 public class RestaurantServiceImpl implements RestaurantService {
@@ -24,17 +28,18 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
-    public Restaurant getById(int id) {
-        return repository.findById(id).orElse(null);
+    public Restaurant getById(int id) throws NotFoundException {
+        return checkNotFoundWithId(repository.findById(id).orElse(null), id);
     }
 
     @Override
-    public boolean delete(int id) {
-        return repository.delete(id)!=0;
+    public void delete(int id) {
+        checkNotFoundWithId(repository.delete(id)!=0, id);
     }
 
     @Override
     public Restaurant save(Restaurant restaurant) {
+        Assert.notNull(restaurant, "restaurant must not be null");
         return repository.save(restaurant);
     }
 

@@ -11,9 +11,9 @@ import java.util.Map;
 
 public interface VoteService {
 
-    Map<LocalDate, List<Vote>> getVotesHistoryByRestaurant(int restaurant_id);
-    Map<Restaurant, List<Vote>> getVotesByDate(LocalDate localDate);
-    List<Vote> getVotesByDateAndRestaurant(LocalDate localDate, int restaurantId);
+    Map<LocalDate, List<Vote>> getHistoryByRestaurant(int restaurant_id);
+    Map<Restaurant, List<Vote>> getByDate(LocalDate localDate);
+    List<Vote> getByDateAndRestaurant(LocalDate localDate, int restaurantId);
     Vote getByUserAndDate(int userId, LocalDate date) throws NotFoundException;
 
 

@@ -6,9 +6,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import ru.protopopova.model.Restaurant;
+import ru.protopopova.util.NotFoundException;
 
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static ru.protopopova.RestarauntTestData.*;
 
 
@@ -33,7 +35,7 @@ class RestaurantServiceImplTest extends AbstractServiceTest {
 
     @Test
     public void getByIdNotExist() {
-        Assertions.assertNull(service.getById(7));
+        assertThrows(NotFoundException.class, ()->service.getById(7));
 
     };
 
