@@ -1,7 +1,10 @@
 package ru.protopopova.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import ru.protopopova.model.Menu;
 import ru.protopopova.model.Restaurant;
@@ -31,6 +34,7 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
+    @Cacheable("menus")
     public List<Menu> getByRestaurant(int restaurantId) {
         return repository.findByRestaurantId(restaurantId)
                 .orElse(new ArrayList<>())
@@ -40,6 +44,7 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
+    @Cacheable("menus")
     public List<Menu> getByDate(LocalDate localDate) {
         Assert.notNull(localDate, "date must not be null");
 
@@ -56,15 +61,19 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
+    @CacheEvict("menus")
     public void delete(int id) {
-        checkNotFoundWithId(repository.delete(id)!=0, id);}
+        checkNotFoundWithId(repository.delete(id) != 0, id);
+    }
 
     @Override
+    @CacheEvict("menus")
+    @Transactional
     public Menu save(Menu menu, int restaurantId) {
         Assert.notNull(menu, "menu must not be null");
         Restaurant restaurant = restaurantRepository.getOne(restaurantId);
         menu.setRestaurant(restaurant);
-        if (menu.getDishes()==null || menu.getDishes().isEmpty()) {
+        if (menu.getDishes() == null || menu.getDishes().isEmpty()) {
             throw new EmptyMenuException();
         }
         return repository.save(menu);

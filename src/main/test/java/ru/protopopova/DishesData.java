@@ -1,13 +1,12 @@
 package ru.protopopova;
 
-import org.assertj.core.api.ObjectAssert;
+import org.springframework.test.web.servlet.ResultMatcher;
 import ru.protopopova.model.Dish;
 
-import java.time.Month;
 import java.util.List;
 
-import static java.time.LocalDateTime.of;
 import static org.assertj.core.api.Assertions.assertThat;
+import static ru.protopopova.TestUtil.readListFromJsonMvcResult;
 
 
 public class DishesData {
@@ -15,8 +14,8 @@ public class DishesData {
     public static final Dish DISH6 = new Dish(6, "Гренки", 10.0);
     public static final Dish DISH7 = new Dish(7, "Суп-лапша куриный", 65.0);
     public static final Dish DISH8 = new Dish(8, "Котлеты по-Киевски", 135.5);
-    public static final Dish DISH9 = new Dish(9, "Рогалик",20.0);
-    public static final Dish DISH10 = new Dish(10, "Морс 1 л",120.0);
+    public static final Dish DISH9 = new Dish(9, "Рогалик", 20.0);
+    public static final Dish DISH10 = new Dish(10, "Морс 1 л", 120.0);
     public static final Dish DISH11 = new Dish(11, "Рис", 50.0);
     public static final Dish DISH12 = new Dish(12, "Картофельное пюре", 65.0);
     public static final Dish DISH13 = new Dish(13, "Треска в кляре", 235.0);
@@ -37,8 +36,17 @@ public class DishesData {
     public static void assertMatch(Iterable<Dish> actual, Iterable<Dish> expected) {
         assertThat(actual).usingFieldByFieldElementComparator().isEqualTo(expected);
     }
+
     public static void assertMatch(Dish actual, Dish expected) {
         assertThat(actual).isEqualToComparingFieldByField(expected);
+    }
+
+    public static ResultMatcher getDishMatcher(Dish... expected) {
+        return result -> assertMatch(readListFromJsonMvcResult(result, Dish.class), List.of(expected));
+    }
+
+    public static ResultMatcher getDishMatcher(List<Dish> expected) {
+        return result -> assertMatch(readListFromJsonMvcResult(result, Dish.class), expected);
     }
 
 

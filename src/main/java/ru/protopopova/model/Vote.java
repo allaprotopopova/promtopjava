@@ -1,15 +1,10 @@
 package ru.protopopova.model;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
 import org.hibernate.annotations.BatchSize;
-import org.hibernate.annotations.CollectionId;
-import org.hibernate.annotations.Formula;
-import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
 
 @Entity
 
@@ -41,6 +36,7 @@ public class Vote extends AbstractEntity {
     public Vote(User user, Restaurant restaurant) {
         this.user = user;
         this.restaurant = restaurant;
+        this.registered = LocalDate.now();
     }
 
     public Restaurant getRestaurant() {
@@ -55,6 +51,12 @@ public class Vote extends AbstractEntity {
         return registered;
     }
 
+
+    @JsonGetter(value = "registered")
+    public String getRegisteredString() {
+        return registered.toString();
+    }
+
     public void setRegistered(LocalDate registered) {
         this.registered = registered;
     }
@@ -66,6 +68,7 @@ public class Vote extends AbstractEntity {
     public void setUser(User user) {
         this.user = user;
     }
+
 
     @Override
     public String toString() {

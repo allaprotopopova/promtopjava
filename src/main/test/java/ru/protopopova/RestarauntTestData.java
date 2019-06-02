@@ -1,17 +1,12 @@
 package ru.protopopova;
 
+import org.springframework.test.web.servlet.ResultMatcher;
 import ru.protopopova.model.Restaurant;
-import ru.protopopova.model.Role;
-import ru.protopopova.model.User;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static ru.protopopova.UserTestData.ADMIN_ID;
-import static ru.protopopova.UserTestData.USER_ID;
-import static ru.protopopova.model.AbstractEntity.START_SEQ;
-
-
+import static ru.protopopova.TestUtil.readListFromJsonMvcResult;
 
 
 public class RestarauntTestData {
@@ -28,9 +23,19 @@ public class RestarauntTestData {
     public static void assertMatch(Iterable<Restaurant> actual, Iterable<Restaurant> expected) {
         assertThat(actual).usingFieldByFieldElementComparator().isEqualTo(expected);
     }
+
     public static void assertMatch(Restaurant actual, Restaurant expected) {
         assertThat(actual).isEqualToComparingFieldByField(expected);
     }
+
+    static void assertMatchWithoutVotes(Restaurant actual, Restaurant expected) {
+        assertThat(actual).isEqualToIgnoringGivenFields(expected, "votes");
+    }
+
+    public static ResultMatcher getRestaurantMatcher(Restaurant... expected) {
+        return result -> assertMatch(readListFromJsonMvcResult(result, Restaurant.class), List.of(expected));
+    }
+
 
     private RestarauntTestData() {
     }

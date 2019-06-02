@@ -1,5 +1,7 @@
 package ru.protopopova.model;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.BatchSize;
 
 import javax.persistence.*;
@@ -13,6 +15,7 @@ public class Menu extends AbstractEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant_id")
+    @JsonIgnore
     Restaurant restaurant;
 
     @Column(name = "created", columnDefinition = "DATE DEFAULT CURRENT_DATE")
@@ -46,6 +49,11 @@ public class Menu extends AbstractEntity {
         return created;
     }
 
+    @JsonGetter(value = "created")
+    public String getCreatedAsString() {
+        return created.toString();
+    }
+
     public void setCreated(LocalDate created) {
         this.created = created;
     }
@@ -58,11 +66,11 @@ public class Menu extends AbstractEntity {
         this.dishes = dishes;
     }
 
+
     @Override
     public String toString() {
         return "Menu{ created=" + created +
                 ", dishes=" + dishes +
-                "restId="+restaurant.getId()+
                 '}';
     }
 }

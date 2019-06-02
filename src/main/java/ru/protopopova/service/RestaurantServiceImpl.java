@@ -1,6 +1,8 @@
 package ru.protopopova.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import ru.protopopova.model.Restaurant;
@@ -19,10 +21,11 @@ public class RestaurantServiceImpl implements RestaurantService {
     @Autowired
     public RestaurantServiceImpl(CrudRestaurantRepository repository) {
         this.repository = repository;
-       }
+    }
 
 
     @Override
+    @Cacheable("restaurants")
     public List<Restaurant> get() {
         return repository.findAll();
     }
@@ -33,11 +36,13 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
+    @CacheEvict("restaurants")
     public void delete(int id) {
-        checkNotFoundWithId(repository.delete(id)!=0, id);
+        checkNotFoundWithId(repository.delete(id) != 0, id);
     }
 
     @Override
+    @CacheEvict("restaurants")
     public Restaurant save(Restaurant restaurant) {
         Assert.notNull(restaurant, "restaurant must not be null");
         return repository.save(restaurant);

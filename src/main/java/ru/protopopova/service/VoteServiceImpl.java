@@ -1,10 +1,11 @@
 package ru.protopopova.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
-import ru.protopopova.model.AbstractEntity;
 import ru.protopopova.model.Restaurant;
 import ru.protopopova.model.Vote;
 import ru.protopopova.repository.CrudVoteRepository;
@@ -35,12 +36,14 @@ public class VoteServiceImpl implements VoteService {
 
     @Override
     @Transactional
+    @Cacheable("votes")
     public Map<LocalDate, List<Vote>> getHistoryByRestaurant(int restaurant_id) {
         List<Vote> allVotes = repository.findByRestaurantId(restaurant_id).orElse(new ArrayList<>());
         return allVotes.stream().sorted(Comparator.comparingInt(Vote::getId)).collect(Collectors.groupingBy(Vote::getRegistered));
     }
 
     @Override
+    @Cacheable("votes")
     public Map<Restaurant, List<Vote>> getByDate(LocalDate localDate) {
         Assert.notNull(localDate, "date must not be null");
         List<Vote> allVotes = repository.findByRegistered(localDate).orElse(new ArrayList<>());
@@ -48,6 +51,7 @@ public class VoteServiceImpl implements VoteService {
     }
 
     @Override
+    @Cacheable("votes")
     public List<Vote> getByDateAndRestaurant(LocalDate localDate, int restaurantId) {
         Assert.notNull(localDate, "date must not be null");
         return repository.findByRegisteredAndRestaurantId(localDate, restaurantId).orElse(new ArrayList<>()).stream().sorted(Comparator.comparingInt(Vote::getId)).collect(Collectors.toList());
@@ -56,7 +60,7 @@ public class VoteServiceImpl implements VoteService {
     @Override
     public Vote getByUserAndDate(int userId, LocalDate date) throws NotFoundException {
         Assert.notNull(date, "date must not be null");
-        return checkNotFound(getVoteByUserAndDate(userId, date), "vote for userId="+userId+" and date="+date.toString()+" is not found");
+        return checkNotFound(getVoteByUserAndDate(userId, date), "vote for userId=" + userId + " and date=" + date.toString() + " is not found");
     }
 
     private Vote getVoteByUserAndDate(int userId, LocalDate date) {
@@ -66,19 +70,22 @@ public class VoteServiceImpl implements VoteService {
 
 
     @Override
+    @CacheEvict("votes")
     public boolean delete(int id) {
         throw new IllegalVoteChangingException("Vote deleting is forbidden!");
     }
 
     @Override
     @Transactional
+    @CacheEvict({"votes", "restaurants"})
     public Vote save(Vote vote) {
         Assert.notNull(vote, "vote must not be null");
         Vote dbVote = getVoteByUserAndDate(vote.getUser().getId(), LocalDate.now());
-        if (dbVote!=null) {
+        if (dbVote != null) {
             if (LocalTime.now().isAfter(DEADLINE_TIME)) {
                 throw new IllegalVoteChangingException();
-            };
+            }
+
         }
         return repository.save(vote);
     }

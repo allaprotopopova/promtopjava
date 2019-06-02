@@ -1,6 +1,9 @@
 package ru.protopopova;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.cache.concurrent.ConcurrentMapCacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -13,7 +16,6 @@ import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
@@ -22,6 +24,7 @@ import javax.sql.DataSource;
 @ComponentScan(basePackages = "ru.protopopova.**.service")
 @PropertySource("classpath:db/h2sqldb.properties")
 @EnableJpaRepositories("ru.protopopova.repository")
+@EnableCaching
 public class ApplicationConfig {
     @Value("classpath:db/initDB_hsql.sql")
     private Resource schemaScript;
@@ -62,6 +65,11 @@ public class ApplicationConfig {
         JpaTransactionManager transactionManager = new JpaTransactionManager();
         transactionManager.setEntityManagerFactory(entityManagerFactory());
         return transactionManager;
+    }
+
+    @Bean
+    public CacheManager cacheManager() {
+        return new ConcurrentMapCacheManager("users", "votes", "restaurants", "menus", "dishes");
     }
 
 

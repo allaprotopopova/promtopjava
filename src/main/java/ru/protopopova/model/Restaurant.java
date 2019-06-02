@@ -1,18 +1,17 @@
 package ru.protopopova.model;
 
-import org.hibernate.annotations.BatchSize;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import org.hibernate.annotations.Formula;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @Entity
-@Table(name="restaurants", uniqueConstraints = {@UniqueConstraint(columnNames = {"name", "address"}, name="restaurants_idx")})
+@Table(name = "restaurants", uniqueConstraints = {@UniqueConstraint(columnNames = {"name", "address"}, name = "restaurants_idx")})
 public class Restaurant extends AbstractNamedEntity {
 
     @NotBlank
@@ -21,26 +20,32 @@ public class Restaurant extends AbstractNamedEntity {
     private String address;
 
     @Formula("(select count(v.user_id) from votes v where v.restaurant_id = id and v.registered = CURRENT_DATE)")
+    @JsonInclude
     private int votes;
 
     public Restaurant() {
+        super();
+
     }
 
     public Restaurant(Integer id, String name, String address, int votes) {
         super(id, name);
         this.address = address;
-        this.votes=votes;
+        this.votes = votes;
     }
 
     public Restaurant(Restaurant restaurant) {
-        this.id = restaurant.getId();
-        this.name=restaurant.getName();
+        super(restaurant.getId(), restaurant.getName());
         this.address = restaurant.getAddress();
         this.votes = restaurant.getVotes();
     }
 
-    private int getVotes() {
+    public int getVotes() {
         return votes;
+    }
+
+    public void setVotes(int votes) {
+        this.votes = votes;
     }
 
     public String getAddress() {
